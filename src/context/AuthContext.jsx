@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { adminLogin as apiLogin, adminLogout as apiLogout, getSuggestions } from '../utils/api';
+import { adminLogin as apiLogin, adminLogout as apiLogout } from '../utils/api';
 
 const AuthContext = createContext();
 
@@ -14,19 +14,17 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const checkSession = async () => {
-    try {
-      await getSuggestions();
+    const token = localStorage.getItem('admin_token');
+    if (token) {
       setIsAuthenticated(true);
-    } catch (error) {
-      setIsAuthenticated(false);
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   const login = async (password) => {
     try {
-      await apiLogin(password);
+      const response = await apiLogin(password);
+      localStorage.setItem('admin_token', response.token);
       setIsAuthenticated(true);
       return true;
     } catch (error) {
@@ -40,6 +38,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error(error);
     } finally {
+      localStorage.removeItem('admin_token');
       setIsAuthenticated(false);
     }
   };
