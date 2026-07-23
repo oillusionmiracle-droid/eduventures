@@ -7,7 +7,12 @@ const defaultHeaders = {
 async function fetchWithHandler(url, options = {}) {
   try {
     options.credentials = 'include';
-    options.headers = { ...defaultHeaders, ...options.headers };
+    const token = localStorage.getItem('admin_token');
+    options.headers = { 
+      ...defaultHeaders, 
+      ...options.headers,
+      ...(token && { Authorization: `Bearer ${token}` })
+    };
 
     const response = await fetch(url, options);
     
