@@ -1,5 +1,3 @@
-console.log('SUPABASE_URL exists:', !!process.env.SUPABASE_URL);
-console.log('SUPABASE_URL value:', process.env.SUPABASE_URL ? process.env.SUPABASE_URL.substring(0, 30) + '...' : 'NOT SET');
 import express from 'express';
 import crypto from 'crypto';
 import { supabase } from '../utils/supabase.js';
